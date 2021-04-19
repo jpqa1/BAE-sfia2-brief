@@ -1,0 +1,41 @@
+version: "3.8"
+services:
+  db:
+    container_name: mysql
+    build: ./database
+    image: jp22237/proj-db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+    - type: volume
+      source: devops-project-db
+      target: /var/lib/mysql
+  backend:
+    container_name: backend
+    build: ./backend
+    image: jp22237/proj-be
+    environment:
+      DATABASE_URI: ${DATABASE_URI} #mysql+pymysql://root:password@mysql:3306/users
+    depends_on:
+      - db
+    ports:
+    - target: 5001
+      published: 5001
+  frontend:
+    container_name: frontend
+    build: ./frontend
+    image: jp22237/proj-fe
+    ports:
+    - target: 5000
+      published: 5000
+  nginx:
+    image: nginx:latest
+    ports:
+    - target: 80
+      published: 80
+    volumes:
+    - type: bind
+      source: ./nginx/nginx.conf
+      target: /etc/nginx/nginx.conf
+volumes:
+  devops-project-db:
