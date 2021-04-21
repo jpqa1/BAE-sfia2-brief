@@ -31,3 +31,25 @@ module "ec2" {
   subnet_group_name = module.subnets.database_subnet_group
   database_password = var.database_password
 }
+
+resource "local_file" "tf_ansible_inventory" {
+  content  = <<-DOC
+    all:
+      children:
+        docker:
+          hosts:
+            ${module.ec2.docker_ip}: #docker
+          vars:
+            ansible_ssh_private_key_file: "~/.ssh/ssh-aws-pc"
+            ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+            ansible_user: ubuntu
+        jenkins:
+          hosts:
+            ${module.ec2.jenkins_ip}: #Jenkins
+          vars:
+            ansible_ssh_private_key_file: "~/.ssh/ssh-aws-pc"
+            ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+            ansible_user: ubuntu
+    DOC
+  filename = "./inventory.yaml"
+}

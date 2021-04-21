@@ -6,6 +6,18 @@ output "jenkins-interface" {
   value = aws_network_interface.jenkins-interface.id
 }
 
+output "jenkins-priv-ips" {
+  value = aws_network_interface.jenkins-interface.private_ips
+}
+
+output "docker-priv-ips" {
+  value = aws_network_interface.docker-interface.private_ips
+}
+
+output "test-priv-ips" {
+  value = aws_network_interface.test-interface.private_ips
+}
+
 output "docker-interface" {
   value = aws_network_interface.docker-interface.id
 }

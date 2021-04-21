@@ -1,0 +1,86 @@
+- hosts: all
+  become: yes
+  tasks:
+  - name: Install Docker Depencies
+    apt:
+      pkg:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+      - lsb-release
+      # - software-properties-common
+      # - python3-pip
+      # - git
+      update_cache: true
+  - name: Add Docker GPG Key
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present
+  - name: Add Docker APT Repository
+    apt_repository:
+      repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename|lower }} stable
+      state: present
+  - name: Install the Docker Engine
+    apt:
+      pkg:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      update_cache: true
+  - name: Add Ubuntu user to the docker group
+    user:
+      name: ubuntu
+      groups: docker
+      append: yes
+
+- name: Install Jenkins
+  hosts: jenkins
+  become: true
+  tasks:
+    - name: Install Java
+      apt:
+        name: openjdk-8-jdk
+        state: present
+        update_cache: yes
+    - name: Download Jenkins Key
+      apt_key:
+        url: https://pkg.jenkins.io/debian/jenkins.io.key
+        state: present
+    - name: Import Jenkins Repo
+      apt_repository:
+        repo: deb http://pkg.jenkins.io/debian-stable binary/
+        state: present
+    - name: Apt Install Jenkins 
+      apt:
+        name: jenkins
+        state: present
+        update_cache: yes
+    - name: Start & Enable Jenkins
+      systemd:
+        name: jenkins
+        state: started
+        enabled: true
+    - name: Sleep for 15 seconds and continue with play
+      wait_for: timeout=15
+    - name: ssh folder
+      file:
+        path: /home/jenkins/.ssh
+        state: directory
+        mode: "0700"
+        owner: jenkins
+        group: jenkins
+    - name: install private key
+      copy:
+        src: ~/.ssh/ssh-aws-pc
+        dest: /home/jenkins/.ssh/ssh-aws-pc
+        owner: jenkins
+        group: jenkins
+        mode: u=rw,g=,o=
+    - name: Get init password Jenkins
+      shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+      changed_when: false
+      register: result
+    - name: Print init password Jenkins
+      debug:
+        var: result.stdout
