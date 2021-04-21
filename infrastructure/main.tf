@@ -13,12 +13,21 @@ module "subnets" {
 
   vpc_id        = module.vpc.vpc_id
   route_id      = module.vpc.route_id
-  security_id   = module.vpc.security_id
-  internet_gate = module.vpc.interner_gate
+  sec_group_id  = module.vpc.sec_group_id
+  internet_gate = module.vpc.internet_gate
 }
 
 module "ec2" {
   source = "./ec2"
 
-  network_int_id = module.subnets.network_int_id
+  network_id_jenk   = module.subnets.jenkins-interface
+  network_id_dock   = module.subnets.docker-interface
+  network_id_test   = module.subnets.test-interface
+  ami_id            = "ami-096cb92bb3580c759"
+  instance_type     = "t2.medium"
+  availability_zone = "eu-west-2a"
+  key_name          = "ssh-aws-pc"
+  security_group_id = module.vpc.db_sec_group_id
+  subnet_group_name = module.subnets.database_subnet_group
+  database_password = var.database_password
 }

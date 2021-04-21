@@ -8,4 +8,8 @@ variable "secret_key" {
   sensitive = true
 }
 
-# variable "database_password"
+variable "database_password" {
+  type      = string
+  sensitive = true
+}
+
