@@ -27,7 +27,7 @@ resource "aws_subnet" "private-subnet-2" {
 }
 
 # resource "aws_route_table_association" "public_association" {
-#   subnet_id      = aws_subnet.public.id
+#   subnet_id      = aws_subnet.public-subnet.id
 #   route_table_id = var.route_id
 
 # }
@@ -44,7 +44,7 @@ resource "aws_db_subnet_group" "private_subnet_group" {
 
 resource "aws_network_interface" "jenkins-interface" {
 
-  subnet_id       = aws_subnet.public.id
+  subnet_id       = aws_subnet.public-subnet.id
   private_ips     = ["10.0.1.50"]
   security_groups = [var.sec_group_id]
 
@@ -52,7 +52,7 @@ resource "aws_network_interface" "jenkins-interface" {
 
 resource "aws_network_interface" "docker-interface" {
 
-  subnet_id       = aws_subnet.public.id
+  subnet_id       = aws_subnet.public-subnet.id
   private_ips     = ["10.0.1.51"]
   security_groups = [var.sec_group_id]
 
@@ -60,7 +60,7 @@ resource "aws_network_interface" "docker-interface" {
 
 resource "aws_network_interface" "test-interface" {
 
-  subnet_id       = aws_subnet.public.id
+  subnet_id       = aws_subnet.public-subnet.id
   private_ips     = ["10.0.1.52"]
   security_groups = [var.sec_group_id]
 
@@ -85,7 +85,7 @@ resource "aws_nat_gateway" "nat-gateway" {
   ]
 
   allocation_id = aws_eip.nat-gw-elastic.id
-  subnet_id     = aws_subnet.public_subnet.id
+  subnet_id     = aws_subnet.public-subnet.id
 
   tags = {
     Name = "nat gateway"
@@ -114,12 +114,12 @@ resource "aws_route_table_association" "public-1" {
   route_table_id = var.route_id
 }
 
-resource "aws_route_table_association" "private-1" {
-  subnet_id      = aws_subnet.private-1.id
+resource "aws_route_table_association" "private-subnet-1" {
+  subnet_id      = aws_subnet.private-subnet-1.id
   route_table_id = aws_route_table.nat-route-table.id
 }
 
-resource "aws_route_table_association" "private-2" {
-  subnet_id      = aws_subnet.private-2.id
+resource "aws_route_table_association" "private-subnet-2" {
+  subnet_id      = aws_subnet.private-subnet-2.id
   route_table_id = aws_route_table.nat-route-table.id
 }

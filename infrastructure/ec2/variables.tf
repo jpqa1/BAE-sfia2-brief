@@ -14,4 +14,6 @@ variable "network_id_dock" {}
 
 variable "network_id_test" {}
 
-variable "security_group_id " {}
+variable "security_group_id" {}
+
+variable "key_name" {}
