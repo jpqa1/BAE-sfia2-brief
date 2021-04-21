@@ -50,6 +50,13 @@ resource "local_file" "tf_ansible_inventory" {
             ansible_ssh_private_key_file: "~/.ssh/ssh-aws-pc"
             ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
             ansible_user: ubuntu
+        test:
+          hosts:
+            ${module.ec2.test_ip}: #docker
+          vars:
+            ansible_ssh_private_key_file: "~/.ssh/ssh-aws-pc"
+            ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+            ansible_user: ubuntu
     DOC
   filename = "./inventory.yaml"
 }
