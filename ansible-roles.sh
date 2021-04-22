@@ -101,6 +101,18 @@ echo "- name: Install Jenkins
       debug:
         var: result.stdout" > ./ansible/roles/jenkins/tasks/main.yaml
 
+echo "events {}
+http {
+	server {
+		listen 80;
+
+		location / {
+			proxy_pass http://frontend:5000/;
+		}
+	}
+}
+" > ./nginx/nginx.conf
+
 echo "- name: 'download and install nginx using apt'
   apt:
     pkg:
