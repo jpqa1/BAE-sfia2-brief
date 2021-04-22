@@ -48,7 +48,7 @@ echo "- name: install Docker
     get_url: 
       url : https://github.com/docker/compose/releases/download/1.29.1-rc1/docker-compose-Linux-x86_64
       dest: /usr/local/bin/docker-compose
-      mode: 'u+x,g+x'" > ./ansible/roles/docker/tasks/main.yaml
+      mode: 'u+x,g+x'" > ./docker/tasks/main.yml
 
 echo "- name: Install Jenkins
   hosts: jenkins
@@ -99,7 +99,7 @@ echo "- name: Install Jenkins
       register: result
     - name: Print init password Jenkins
       debug:
-        var: result.stdout" > ./ansible/roles/jenkins/tasks/main.yaml
+        var: result.stdout" > ./jenkins/tasks/main.yml
 
 echo "events {}
 http {
@@ -127,10 +127,10 @@ echo "- name: 'download and install nginx using apt'
   template:
     src: nginx.conf
     dest: /etc/nginx/nginx.conf
-  notify: 'reload nginx'" > ./ansible/roles/nginx/tasks/main.yaml
+  notify: 'reload nginx'" > ./nginx/tasks/main.yml
 
 echo "- name: 'reload nginx'
   service:
     name: nginx
-    state: reloaded" > roles/nginx/handlers/main.yml
+    state: reloaded" > ./nginx/handlers/main.yml
 

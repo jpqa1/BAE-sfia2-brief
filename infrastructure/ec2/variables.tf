@@ -12,6 +12,8 @@ variable "network_id_jenk" {}
 
 variable "network_id_dock" {}
 
+variable "network_id_bast" {}
+
 variable "network_id_test" {}
 
 variable "security_group_id" {}

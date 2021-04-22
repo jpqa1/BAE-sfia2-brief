@@ -6,6 +6,10 @@ output "jenkins-interface" {
   value = aws_network_interface.jenkins-interface.id
 }
 
+output "bastion-interface" {
+  value = aws_network_interface.bastion-interface.id
+}
+
 output "jenkins-priv-ips" {
   value = aws_network_interface.jenkins-interface.private_ips
 }
