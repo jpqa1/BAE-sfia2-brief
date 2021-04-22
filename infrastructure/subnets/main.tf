@@ -67,13 +67,13 @@ resource "aws_network_interface" "test-interface" {
 }
 
 
-resource "aws_network_interface" "bastion-interface" {
+# resource "aws_network_interface" "bastion-interface" {
 
-  subnet_id       = aws_subnet.public-subnet.id
-  private_ips     = ["10.0.1.53"]
-  security_groups = [var.sec_group_id]
+#   subnet_id       = aws_subnet.public-subnet.id
+#   private_ips     = ["10.0.1.53"]
+#   security_groups = [var.sec_group_id]
 
-}
+# }
 
 # resource "aws_eip" "elastic-ip-one" {
 #   vpc                       = true

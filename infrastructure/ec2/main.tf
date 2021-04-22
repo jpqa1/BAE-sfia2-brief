@@ -1,24 +1,24 @@
 
-resource "aws_instance" "bastion" {
-  ami               = var.ami_id
-  instance_type     = var.instance_type
-  availability_zone = var.availability_zone
-  key_name          = var.key_name
-  user_data         = <<-EOF
-                   #!/bin/bash
-                   sudo apt update -y
-                   EOF
+# resource "aws_instance" "bastion" {
+#   ami               = var.ami_id
+#   instance_type     = var.instance_type
+#   availability_zone = var.availability_zone
+#   key_name          = var.key_name
+#   user_data         = <<-EOF
+#                    #!/bin/bash
+#                    sudo apt update -y
+#                    EOF
 
-  network_interface {
-    network_interface_id = var.network_id_bast
-    device_index         = 0
-  }
+#   network_interface {
+#     network_interface_id = var.network_id_bast
+#     device_index         = 0
+#   }
 
-  tags = {
-    Name = "bastion"
-  }
+#   tags = {
+#     Name = "bastion"
+#   }
 
-}
+# }
 
 
 resource "aws_instance" "jenkins" {
