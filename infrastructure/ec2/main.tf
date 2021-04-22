@@ -3,6 +3,7 @@ resource "aws_instance" "bastion" {
   ami               = var.ami_id
   instance_type     = var.instance_type
   availability_zone = var.availability_zone
+  key_name          = var.key_name
   user_data         = <<-EOF
                    #!/bin/bash
                    sudo apt update -y
