@@ -1,0 +1,14 @@
+version: "3.8"
+    nginx:
+        image: nginx:latest
+        container_name: nginx
+
+
+    frontend:
+        build: ./frontend
+    depends_on:
+        - "database"
+
+    database:
+        image: mysql:latest
+        container_name: mysql-database
