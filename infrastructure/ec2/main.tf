@@ -1,3 +1,25 @@
+
+resource "aws_instance" "bastion" {
+  ami               = var.ami_id
+  instance_type     = var.instance_type
+  availability_zone = var.availability_zone
+  user_data         = <<-EOF
+                   #!/bin/bash
+                   sudo apt update -y
+                   EOF
+
+  network_interface {
+    network_interface_id = var.network_id_bast
+    device_index         = 0
+  }
+
+  tags = {
+    Name = "bastion"
+  }
+
+}
+
+
 resource "aws_instance" "jenkins" {
   ami               = var.ami_id
   instance_type     = var.instance_type
@@ -63,28 +85,6 @@ resource "aws_instance" "test" {
 
 }
 
-# resource "aws_instance" "bastion" {
-#   ami               = "ami-096cb92bb3580c759" # us-west-2
-#   instance_type     = "t2.medium"
-#   availability_zone = "eu-west-2a"
-#   user_data         = <<-EOF
-#                    #!/bin/bash
-#                    sudo apt update -y
-#                    sudo apt install software-properties-common
-#                    sudo apt-add-repository --yes --update ppa:ansible/ansible
-#                    sudo apt install ansible -y
-#                    EOF
-
-#   #   network_interface {
-#   #     network_interface_id = var.network_int_id
-#   #     device_index         = 0
-#   #   }
-
-#   tags = {
-#     Name = "bastion"
-#   }
-
-# }
 
 resource "aws_db_instance" "database" {
   identifier             = "mydb"

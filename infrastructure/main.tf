@@ -23,6 +23,7 @@ module "ec2" {
   network_id_jenk   = module.subnets.jenkins-interface
   network_id_dock   = module.subnets.docker-interface
   network_id_test   = module.subnets.test-interface
+  network_id_bast   = module.subnets.bastion-interface
   ami_id            = "ami-096cb92bb3580c759"
   instance_type     = "t2.medium"
   availability_zone = "eu-west-2a"
@@ -32,31 +33,31 @@ module "ec2" {
   database_password = var.database_password
 }
 
-resource "local_file" "tf_ansible_inventory" {
-  content  = <<-DOC
-    all:
-      children:
-        docker:
-          hosts:
-            ${module.ec2.docker_ip}: #docker
-          vars:
-            ansible_ssh_private_key_file: "~/.ssh/ssh-aws-pc"
-            ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
-            ansible_user: ubuntu
-        jenkins:
-          hosts:
-            ${module.ec2.jenkins_ip}: #Jenkins
-          vars:
-            ansible_ssh_private_key_file: "~/.ssh/ssh-aws-pc"
-            ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
-            ansible_user: ubuntu
-        test:
-          hosts:
-            ${module.ec2.test_ip}: #docker
-          vars:
-            ansible_ssh_private_key_file: "~/.ssh/ssh-aws-pc"
-            ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
-            ansible_user: ubuntu
-    DOC
-  filename = "./inventory.yaml"
-}
+# resource "local_file" "tf_ansible_inventory" {
+#   content  = <<-DOC
+#     all:
+#       children:
+#         docker:
+#           hosts:
+#             10.0.1.51: #docker
+#           vars:
+#             ansible_ssh_private_key_file: "~/.ssh/ssh-aws-pc"
+#             ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+#             ansible_user: ubuntu
+#         jenkins:
+#           hosts:
+#             10.0.1.50: #Jenkins
+#           vars:
+#             ansible_ssh_private_key_file: "~/.ssh/ssh-aws-pc"
+#             ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+#             ansible_user: ubuntu
+#         test:
+#           hosts:
+#             10.0.1.52: #test
+#           vars:
+#             ansible_ssh_private_key_file: "~/.ssh/ssh-aws-pc"
+#             ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+#             ansible_user: ubuntu
+#     DOC
+#   filename = "./inventory.yaml"
+# }
