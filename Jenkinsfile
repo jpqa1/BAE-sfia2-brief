@@ -5,7 +5,7 @@ pipeline{
                             steps{
                                     sh '''
                                     ssh -i ssh-aws-pc ubuntu@10.0.1.51 << EOF
-                                        git clone https://github.com/jpqa1/BAE-sfia2-brief.git
+                                        git clone git@github.com:jpqa1/BAE-sfia2-brief.git
 EOF
                                     '''
                             }
