@@ -5,7 +5,7 @@ pipeline{
                             steps{
                                     sh '''
                                     ssh -i /home/jenkins/.ssh/ssh-aws-pc ubuntu@10.0.1.51 << EOF
-                                        git clone git@github.com:jpqa1/BAE-sfia2-brief.git
+                                        git clone --branch dev-peter-jon git@github.com:jpqa1/BAE-sfia2-brief.git
                                         cd ./BAE-sfia2-brief
                                         docker-compose build
                                         docker-compose up -d
