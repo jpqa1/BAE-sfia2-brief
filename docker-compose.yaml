@@ -24,6 +24,6 @@ services:
         image: frontend
         ports:
         - target: 5000
-          published: 5000
+          published: 80
           protocol: tcp
 
