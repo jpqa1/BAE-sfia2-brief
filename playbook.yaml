@@ -1,20 +1,14 @@
-# - hosts: docker
-#   become: yes
-#   roles:
-#   - docker
+- hosts: localhost
+  connection: local
+  tasks:
+  - name: "generate key pair"
+    openssh_keypair:
+      path: ~/.ssh/ansible_passkey
 
-# - hosts: test
-#   become: yes
-#   roles:
-#   - docker
 
-# - hosts: jenkins
-#   become: yes
-#   roles:
-#   - jenkins
 
 - name: Install Docker
-  hosts: docker
+  hosts: all
   become: true
   tasks:
   - name: jenkins user
@@ -68,16 +62,16 @@
     service:
       name: docker
       state: started
-  # - name: insecure registry create Dir
-  #   file:
-  #     path: /etc/docker/
-  #     state: directory
-  #     mode: "0700"
-  # - name: insecure registry copy file
-  #   copy:
-  #     src: ~/terraform-branch/infrastructure/daemon.json
-  #     dest: /etc/docker/daemon.json
-  #     mode: u=rw,g=,o=
+  - name: insecure registry create Dir
+    file:
+      path: /etc/docker/
+      state: directory
+      mode: "0700"
+  - name: insecure registry copy file
+    copy:
+      src: ./infrastructure/daemon.json
+      dest: /etc/docker/daemon.json
+      mode: u=rw,g=,o=
   - name: Add jenkins user to docker group
     user:
       name: jenkins
@@ -140,3 +134,23 @@
     - name: Print init password Jenkins
       debug:
         var: result.stdout
+
+
+- name: Install docker public ssh key
+  hosts: docker, test
+  become: true
+  tasks:
+  - name: ssh folder
+    file:
+      path: ~/.ssh
+      state: directory
+      mode: "0700"
+      owner: jenkins
+      group: jenkins 
+  - name: install public key
+    copy:
+      src: ~/.ssh/ansible_passkey.pub
+      dest: ~/.ssh/authorized_keys
+      owner: jenkins
+      group: jenkins
+      mode: u=rw,g=,o=
