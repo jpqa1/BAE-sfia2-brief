@@ -4,9 +4,9 @@ pipeline{
                     stage('--Front End--'){
                             steps{
                                     sh '''
-                                    ssh -i ssh-aws-pc ubuntu@10.0.1.51
-                                    git clone https://github.com/jpqa1/BAE-sfia2-brief.git
-
+                                    ssh -i ssh-aws-pc ubuntu@10.0.1.51 << EOF
+                                        git clone https://github.com/jpqa1/BAE-sfia2-brief.git
+EOF
                                     '''
                             }
                     }  
