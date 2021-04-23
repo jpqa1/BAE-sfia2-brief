@@ -1,26 +1,36 @@
-pipeline {
-    agent any
-    environment {
-        MYSQL_ROOT_PASSWORD = credentials("MYSQL_ROOT_PASSWORD")
-        DATABASE_URI = credentials("DATABASE_URI")
-        DOCKER_PASSWORD = credentials("DOCKER_PASSWORD")
+pipeline{
+            agent any
+            stages{
+                    stage('--Front End--'){
+                            steps{
+                                    sh '''
+                                            image="10.0.1.50:5000/frontend:build-$BUILD_NUMBER"
+                                            docker build -t $image /var/lib/jenkins/workspace/DnD_master/frontend
+                                            docker push $image
+                                            ssh 10.0.1.51 -oStrictHostKeyChecking=no  << EOF
+                                            docker service update --image $image DnDCharacterGen_frontend
+                                    '''
+                            }
+                    }  
+     
+                    stage('--Back End--'){
+                            steps{
+                                    sh '''
+                                            image="10.0.1.50:5000/backend:build-$BUILD_NUMBER"
+                                            docker build -t $image /var/lib/jenkins/workspace/DnD_master/backend
+                                            docker push $image
+                                            ssh 10.0.1.51 -oStrictHostKeyChecking=no  << EOF
+                                            docker service update --image $image DnDCharacterGen_backend
+                                    '''
+                            }
+                    }
+                    stage('--Clean up--'){
+                            steps{
+                                    sh '''
+                                            ssh 10.0.1.51 -oStrictHostKeyChecking=no  << EOF
+                                            docker system prune
+                                    '''
+                            }
+                    }
+            }
     }
-    stages {
-        stage('Build') {
-            steps {
-                sh "docker-compose build --parallel"
-            }
-        }
-        stage('Push') {
-            steps {
-                sh "docker-compose push"
-            }
-        }
-        stage('Deploy') {
-            steps {
-                sh "docker-compose up -d"
-            }
-        }
-            
-    }
-}
