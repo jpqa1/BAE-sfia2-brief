@@ -2,7 +2,7 @@ FROM python:3.8
 
 WORKDIR /backend
 
-COPY requirements.txt .
+COPY . .
 
 RUN pip install -r requirements.txt
 

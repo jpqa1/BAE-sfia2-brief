@@ -6,7 +6,7 @@ services:
         image: mysql:latest
         environment:
             MYSQL_ROOT_PASSWORD: password
-    back-end:
+    backend:
         container_name: backend
         build: ./backend
         image: backend
@@ -18,7 +18,7 @@ services:
         - target: 5001
           published: 5001
           protocol: tcp
-    front-end:
+    frontend:
         container_name: frontend
         build: ./frontend
         image: frontend
