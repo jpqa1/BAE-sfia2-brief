@@ -6,10 +6,6 @@ services:
         image: mysql:latest
         environment:
             MYSQL_ROOT_PASSWORD: password
-        volumes:
-        - type: volume
-        source: devops-project-db
-        target: /var/lib/mysql
     back-end:
         container_name: backend
         build: ./backend
@@ -20,25 +16,14 @@ services:
             - database
         ports:
         - target: 5001
-        published: 5001
-        protocol: tcp
+          published: 5001
+          protocol: tcp
     front-end:
         container_name: frontend
         build: ./frontend
         image: frontend
         ports:
         - target: 5000
-        published: 5000
-        protocol: tcp
-    nginx:
-        image: nginx:latest
-        ports:
-        - target: 80
-        published: 80
-        volumes:
-        - type: bind
-        source: ./nginx/nginx.conf
-        target: /etc/nginx/nginx.conf
-volumes:
-    devops-project-db:
+          published: 5000
+          protocol: tcp
 
