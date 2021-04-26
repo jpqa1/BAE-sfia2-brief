@@ -8,4 +8,4 @@ CREATE TABLE `users` (
   `userName` varchar(30) NOT NULL
 );
 
-INSERT INTO `users` VALUES ('Jim'),('Jay'),('Matt'),('Ferg'),('Mo');
+INSERT INTO `users` VALUES ('Sarah'),('Jay'),('Matt'),('Ferg'),('Mo');
